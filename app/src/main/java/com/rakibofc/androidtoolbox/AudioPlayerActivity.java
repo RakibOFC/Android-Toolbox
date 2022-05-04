@@ -13,17 +13,26 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.SeekBar;
+import android.widget.TextView;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class AudioPlayerActivity extends AppCompatActivity {
 
     // Light Mode Color: Maybe green #138f87
 
+    TextView textViewCurrentDuration;
+    TextView textViewFinishTime;
+    SeekBar seekBarDuration;
     ImageView imageViewPlay, imageViewPause;
 
     private String fileName;
@@ -31,8 +40,9 @@ public class AudioPlayerActivity extends AppCompatActivity {
     public int maxVolume;
     public int currentVolume;
     public float audioPitch;
-    private static final int PICK_AUDIO_FILE = 2;
+    public static final int PICK_AUDIO_FILE = 2;
     public Uri audioUri;
+    public Handler handler;
 
     public MediaPlayer mediaPlayer;
     public AudioManager audioManager;
@@ -79,6 +89,10 @@ public class AudioPlayerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_audio_player);
         this.setTitle("Audio Player");
 
+        // Initialize variables
+        textViewCurrentDuration = findViewById(R.id.textViewCurrentDuration);
+        textViewFinishTime = findViewById(R.id.textViewFinishTime);
+        seekBarDuration = findViewById(R.id.seekBarDuration);
         imageViewPlay = findViewById(R.id.imageViewPlay);
         imageViewPause = findViewById(R.id.imageViewPause);
         audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
@@ -103,6 +117,11 @@ public class AudioPlayerActivity extends AppCompatActivity {
                 audioUri = data.getData();
                 mediaPlayer = MediaPlayer.create(AudioPlayerActivity.this, audioUri);
 
+                // Set audio file duration
+                SimpleDateFormat formatter = new SimpleDateFormat("mm:ss");
+                Date progress = new Date(mediaPlayer.getDuration());
+                textViewFinishTime.setText(formatter.format(progress));
+
                 audioPlayer();
             }
         }
@@ -114,6 +133,54 @@ public class AudioPlayerActivity extends AppCompatActivity {
 
             if (!mediaPlayer.isPlaying()) {
                 mediaPlayer.start();
+
+                // Seek_bar set initial state
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+
+                    seekBarDuration.setMin(0);
+                }
+                // Seek_bar set maximum length
+                seekBarDuration.setMax(mediaPlayer.getDuration());
+
+                // Seekbar progress and if a user change the duration
+                seekBarDuration.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                    @Override
+                    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
+                        if (fromUser) {
+                            mediaPlayer.seekTo(progress);
+                        }
+                    }
+
+                    @Override
+                    public void onStartTrackingTouch(SeekBar seekBar) {
+
+                    }
+
+                    @Override
+                    public void onStopTrackingTouch(SeekBar seekBar) {
+
+                    }
+                });
+
+                handler = new Handler();
+                Runnable run = new Runnable() {
+                    @Override
+                    public void run() {
+
+                        int currentPosition = mediaPlayer.getCurrentPosition();
+
+                        SimpleDateFormat formatter = new SimpleDateFormat("mm:ss");
+                        Date progress = new Date(currentPosition);
+
+                        textViewCurrentDuration.setText(formatter.format(progress));
+
+                        seekBarDuration.setProgress(currentPosition);
+                        handler.postDelayed(this, 1000);
+
+                    }
+                };
+                handler.post(run);
             }
             imageViewPlay.setVisibility(View.INVISIBLE);
             imageViewPause.setVisibility(View.VISIBLE);
@@ -122,7 +189,7 @@ public class AudioPlayerActivity extends AppCompatActivity {
         imageViewPause.setOnClickListener(v -> {
 
             if (mediaPlayer.isPlaying()) {
-                mediaPlayer.stop();
+                mediaPlayer.pause();
             }
             imageViewPause.setVisibility(View.INVISIBLE);
             imageViewPlay.setVisibility(View.VISIBLE);
