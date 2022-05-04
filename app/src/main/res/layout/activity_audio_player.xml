@@ -44,7 +44,8 @@
         app:layout_constraintEnd_toStartOf="@+id/textViewFinishTime"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@+id/textViewCurrentDuration"
-        app:layout_constraintTop_toBottomOf="@+id/imageViewMusic" />
+        app:layout_constraintTop_toBottomOf="@+id/imageViewMusic"
+        tools:targetApi="lollipop" />
 
     <TextView
         android:id="@+id/textViewFinishTime"
