@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "815083175848",
+    "project_id": "droid-toolbox",
+    "storage_bucket": "droid-toolbox.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:815083175848:android:63e1656f658f1c551aa79d",
+        "android_client_info": {
+          "package_name": "com.rakibofc.androidtoolbox"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "815083175848-rem6bnrksle9bkp69rsrcns6v28icr01.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCW_cq85xz7BO8uarKBXu4ONiOqQza_Fec"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "815083175848-rem6bnrksle9bkp69rsrcns6v28icr01.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

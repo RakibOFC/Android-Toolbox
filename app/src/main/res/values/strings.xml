@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">Android Toolbox</string>
+    <string name="txt_notebook">Notebook</string>
+    <string name="system_info">System Info</string>
+    <string name="pdf_reader">PDF Reader</string>
+    <string name="audio_player">Audio Player</string>
+    <string name="stopwatch">Stopwatch</string>
+    <string name="timer">Timer</string>
+    <string name="dark_mode">Dark Mode</string>
+    <string name="light_mode">Light Mode</string>
+    <string name="msg_sign_up">Don\'t have an account? <b>Sign up</b></string>
+    <string name="msg_sign_in">Have an account? <b>Log in</b></string>
+    <string name="msg_reset_password"><b>Forgot password?</b></string>
+    <string name="logout">Logout</string>
+    <string name="txt_pip">PIP</string>
+</resources>
