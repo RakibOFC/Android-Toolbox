@@ -36,12 +36,13 @@
         android:id="@+id/seekBarDuration"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
-        android:layout_marginBottom="25dp"
         android:layout_marginStart="5dp"
+        android:layout_marginTop="24dp"
         android:layout_marginEnd="5dp"
+        android:progressTint="@color/teal_700"
         android:thumbTint="@color/teal_700"
         app:layout_constraintEnd_toStartOf="@+id/textViewFinishTime"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@+id/textViewCurrentDuration"
         app:layout_constraintTop_toBottomOf="@+id/imageViewMusic" />
 
@@ -64,9 +65,9 @@
         android:layout_marginTop="25dp"
         android:layout_marginBottom="25dp"
         android:layout_marginStart="5dp"
-        android:layout_marginEnd="5dp"
+        android:layout_marginEnd="20dp"
         android:src="@drawable/playback"
-        app:layout_constraintStart_toStartOf="@+id/seekBarDuration"
+        app:layout_constraintEnd_toStartOf="@+id/imageViewPlay"
         app:layout_constraintTop_toBottomOf="@+id/seekBarDuration" />
 
     <ImageView
@@ -78,14 +79,14 @@
         android:layout_marginStart="5dp"
         android:layout_marginEnd="5dp"
         android:src="@drawable/play"
-        app:layout_constraintEnd_toStartOf="@+id/imageViewPlayForward"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/imageViewPlayback"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/seekBarDuration" />
 
     <ImageView
         android:id="@+id/imageViewPause"
-        android:layout_width="36dp"
+        android:layout_width="38dp"
         android:layout_height="36dp"
         android:layout_marginTop="25dp"
         android:layout_marginBottom="25dp"
@@ -93,9 +94,9 @@
         android:layout_marginEnd="5dp"
         android:src="@drawable/pause"
         android:visibility="invisible"
-        app:layout_constraintEnd_toStartOf="@+id/imageViewPlayForward"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/imageViewPlayback"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/seekBarDuration" />
 
 
@@ -105,10 +106,10 @@
         android:layout_height="36dp"
         android:layout_marginTop="25dp"
         android:layout_marginBottom="25dp"
-        android:layout_marginStart="5dp"
+        android:layout_marginStart="20dp"
         android:layout_marginEnd="5dp"
         android:src="@drawable/play_forward"
-        app:layout_constraintEnd_toEndOf="@id/seekBarDuration"
+        app:layout_constraintStart_toEndOf="@id/imageViewPlay"
         app:layout_constraintTop_toBottomOf="@+id/seekBarDuration" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
