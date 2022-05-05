@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Button Value Initialize
+        /*// Button Value Initialize
         notebook = findViewById(R.id.notebook);
         systemInfo = findViewById(R.id.systemInfo);
         pdfReader = findViewById(R.id.pdfReader);
@@ -102,6 +102,6 @@ public class MainActivity extends AppCompatActivity {
 
             // Start Timer Activity
             startActivity(new Intent(MainActivity.this, Timer.class));
-        });
+        });*/
     }
 }

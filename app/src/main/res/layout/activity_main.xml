@@ -7,95 +7,63 @@
     tools:context=".MainActivity">
 
 
-    <androidx.gridlayout.widget.GridLayout
-        android:id="@+id/grid_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:columnCount="2"
-        app:layout_constraintTop_toTopOf="parent"
-        app:rowCount="6">
+    <LinearLayout
+        android:layout_width="318dp"
+        android:layout_height="567dp"
+        android:orientation="horizontal"
+        tools:layout_editor_absoluteX="1dp"
+        tools:layout_editor_absoluteY="1dp">
 
-        <Button
-            android:id="@+id/notebook"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/txt_notebook"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:textAllCaps="false"
-            android:drawableTop="@drawable/notebook_icon"
-            android:gravity="center|center_vertical"
-            app:layout_columnWeight="1"
-            android:padding="10dp"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:background="@drawable/btn_bg">
 
+            <ImageView
+                android:id="@+id/imageView3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/audio_player_icon"
+                android:padding="5dp" />
 
-        <Button
-            android:id="@+id/systemInfo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/system_info"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:textAllCaps="false"
-            android:drawableTop="@drawable/system_info_icon"
-            android:gravity="center|center_vertical"
-            app:layout_columnWeight="1"
-            android:padding="10dp" />
+            <TextView
+                android:id="@+id/textView13"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="TextView"
+                android:padding="5dp"
+                android:textAlignment="center"/>
 
-        <Button
-            android:id="@+id/pdfReader"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/pdf_reader"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:textAllCaps="false"
-            android:drawableTop="@drawable/pdf_icon"
-            android:gravity="center|center_vertical"
-            app:layout_columnWeight="1"
-            android:padding="10dp"/>
+        </LinearLayout>
 
-        <Button
-            android:id="@+id/audioPlayer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/audio_player"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:textAllCaps="false"
-            android:drawableTop="@drawable/audio_player_icon"
-            android:gravity="center|center_vertical"
-            app:layout_columnWeight="1"
-            android:padding="10dp"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:background="@drawable/btn_bg">
 
-        <Button
-            android:id="@+id/stopwatch"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/stopwatch"
-            android:layout_margin="10dp"
-            android:textAllCaps="false"
-            android:drawableTop="@drawable/stopwatch_icon"
-            android:gravity="center|center_vertical"
-            app:layout_columnWeight="1"
-            android:padding="10dp"/>
+            <ImageView
+                android:id="@+id/imageView3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/audio_player_icon"
+                android:padding="5dp" />
 
-        <Button
-            android:id="@+id/timer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/timer"
-            android:layout_margin="10dp"
-            android:textAllCaps="false"
-            android:drawableTop="@drawable/timer_icon"
-            android:gravity="center|center_vertical"
-            app:layout_columnWeight="1"
-            android:padding="10dp"/>
+            <TextView
+                android:id="@+id/textView13"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="TextView"
+                android:padding="5dp"
+                android:textAlignment="center"/>
 
-    </androidx.gridlayout.widget.GridLayout>
+        </LinearLayout>
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
