@@ -146,8 +146,6 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageViewPlay" />
 
-<!--    Pitch -->
-
     <TextView
         android:id="@+id/textViewPitchMsg"
         android:layout_width="wrap_content"
@@ -156,7 +154,7 @@
         android:layout_marginBottom="25dp"
         android:layout_marginStart="25dp"
         android:layout_marginEnd="25dp"
-        android:text="Pitch:"
+        android:text="Pitch:    "
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/seekBarVolume" />
 
@@ -183,5 +181,44 @@
         android:text="1.4"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/seekBarVolume" />
+
+<!--  Speed  -->
+
+    <TextView
+        android:id="@+id/textViewSpeedMsg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:layout_marginBottom="25dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginEnd="25dp"
+        android:text="Speed:  "
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/seekBarPitch" />
+
+    <SeekBar
+        android:id="@+id/seekBarSpeed"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginEnd="5dp"
+        app:layout_constraintEnd_toStartOf="@+id/textViewSpeed"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/textViewSpeedMsg"
+        app:layout_constraintTop_toBottomOf="@+id/seekBarPitch" />
+
+    <TextView
+        android:id="@+id/textViewSpeed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:layout_marginBottom="25dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginEnd="25dp"
+        android:text="1.4"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/seekBarPitch" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
