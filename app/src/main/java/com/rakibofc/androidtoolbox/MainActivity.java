@@ -12,8 +12,10 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
@@ -21,13 +23,15 @@ import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
 
-    // Button Initialize
-    public Button notebook;
-    public Button systemInfo;
-    public Button pdfReader;
-    public Button audioPlayer;
-    public Button stopwatch;
-    public Button timer;
+    // LinearLayout as a Button Initialize
+    public LinearLayout notebook;
+    public LinearLayout systemInfo;
+    public LinearLayout pdfReader;
+    public LinearLayout audioPlayer;
+    public LinearLayout stopwatch;
+    public LinearLayout timer;
+
+    public final AlphaAnimation itemClick = new AlphaAnimation(2, 0);
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -60,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        /*// Button Value Initialize
+        // Button Value Initialize
         notebook = findViewById(R.id.notebook);
         systemInfo = findViewById(R.id.systemInfo);
         pdfReader = findViewById(R.id.pdfReader);
@@ -71,37 +75,43 @@ public class MainActivity extends AppCompatActivity {
         notebook.setOnClickListener(v -> {
 
             // Start Notebook Activity
+            v.startAnimation(itemClick);
             startActivity(new Intent(MainActivity.this, NotebookLogin.class));
         });
 
         systemInfo.setOnClickListener(v -> {
 
             // Start SystemInfo Activity
+            v.startAnimation(itemClick);
             startActivity(new Intent(MainActivity.this, SystemInfoActivity.class));
         });
 
         pdfReader.setOnClickListener(v -> {
 
             // Start PDFReader Activity
+            v.startAnimation(itemClick);
             startActivity(new Intent(MainActivity.this, PDFReader.class));
         });
 
         audioPlayer.setOnClickListener(v -> {
 
             // Start AudioPlayer Activity
+            v.startAnimation(itemClick);
             startActivity(new Intent(MainActivity.this, AudioPlayerActivity.class));
         });
 
         stopwatch.setOnClickListener(v -> {
 
             // Start Notebook Activity
-            startActivity(new Intent(MainActivity.this, Notebook.class));
+            v.startAnimation(itemClick);
+            startActivity(new Intent(MainActivity.this, Stopwatch.class));
         });
 
         timer.setOnClickListener(v -> {
 
             // Start Timer Activity
+            v.startAnimation(itemClick);
             startActivity(new Intent(MainActivity.this, Timer.class));
-        });*/
+        });
     }
 }
