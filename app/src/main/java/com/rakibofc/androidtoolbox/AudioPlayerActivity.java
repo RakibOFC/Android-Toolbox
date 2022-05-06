@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.media.PlaybackParams;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -22,6 +23,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -33,6 +35,12 @@ public class AudioPlayerActivity extends AppCompatActivity {
     TextView textViewCurrentDuration;
     TextView textViewFinishTime;
     SeekBar seekBarDuration;
+    SeekBar seekBarVolume;
+    TextView textViewVolume;
+    SeekBar seekBarPitch;
+    TextView textViewPitch;
+    SeekBar seekBarSpeed;
+    TextView textViewSpeed;
     ImageView imageViewPlay, imageViewPause;
 
     private String fileName;
@@ -44,6 +52,9 @@ public class AudioPlayerActivity extends AppCompatActivity {
     public Uri audioUri;
     public Handler handler;
 
+    public PlaybackParams playbackParams;
+    public float currentPitch;
+    public float currentSpeed;
     public MediaPlayer mediaPlayer;
     public AudioManager audioManager;
 
@@ -93,9 +104,47 @@ public class AudioPlayerActivity extends AppCompatActivity {
         textViewCurrentDuration = findViewById(R.id.textViewCurrentDuration);
         textViewFinishTime = findViewById(R.id.textViewFinishTime);
         seekBarDuration = findViewById(R.id.seekBarDuration);
+        textViewVolume = findViewById(R.id.textViewVolume);
+        seekBarVolume = findViewById(R.id.seekBarVolume);
+        seekBarPitch = findViewById(R.id.seekBarPitch);
+        textViewPitch = findViewById(R.id.textViewPitch);
+        seekBarSpeed = findViewById(R.id.seekBarSpeed);
+        textViewSpeed = findViewById(R.id.textViewSpeed);
         imageViewPlay = findViewById(R.id.imageViewPlay);
         imageViewPause = findViewById(R.id.imageViewPause);
         audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
+        currentPitch = 1.0f;
+
+        // Set volume in the SeekBar Start
+        int maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+        int currentVolume = audioManager.getStreamVolume(AudioManager.STREAM_ALARM);
+
+        // Set currentVolume in TextView
+        textViewVolume.setText(String.valueOf(currentVolume));
+
+        seekBarVolume.setMax(maxVolume);
+        seekBarVolume.setProgress(currentVolume);
+
+        seekBarVolume.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
+                // Set volume form SeekBar
+                textViewVolume.setText(String.valueOf(progress));
+                audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, progress, 0);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+        // Set volume in the SeekBar - End
     }
 
     private void showFileChooser() {
@@ -122,9 +171,112 @@ public class AudioPlayerActivity extends AppCompatActivity {
                 Date progress = new Date(mediaPlayer.getDuration());
                 textViewFinishTime.setText(formatter.format(progress));
 
+                audioPitch();
+                audioSpeed();
                 audioPlayer();
             }
         }
+    }
+
+    // Audio Pitch Method
+    private void audioPitch() {
+
+        // Set Pitch in the SeekBar - Start
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+
+            PlaybackParams playbackParams = mediaPlayer.getPlaybackParams();
+            currentPitch = playbackParams.getPitch();
+            textViewPitch.setText(String.valueOf(currentPitch));
+            seekBarPitch.setProgress((int) currentPitch * 2);
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            seekBarPitch.setMin(1);
+        }
+        seekBarPitch.setMax(8);
+
+        seekBarPitch.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+
+                    playbackParams = mediaPlayer.getPlaybackParams();
+                    currentPitch = (float) progress/2f;
+                    playbackParams.setPitch(currentPitch);
+                    textViewPitch.setText(String.valueOf(currentPitch));
+                    if (mediaPlayer.isPlaying()) {
+
+                        mediaPlayer.setPlaybackParams(playbackParams);
+                    }
+
+                } else {
+
+                    Toast.makeText(AudioPlayerActivity.this, "Your device not for this feature. Use Android 6.0+", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+        // Set Pitch in the SeekBar - End
+    }
+
+
+    // Audio Speed Method
+    private void audioSpeed(){
+
+        // Set Speed in the SeekBar - Start
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+
+            PlaybackParams playbackParams = mediaPlayer.getPlaybackParams();
+            currentSpeed = playbackParams.getSpeed();
+            textViewSpeed.setText(String.valueOf(currentSpeed));
+            seekBarSpeed.setProgress((int) currentSpeed * 4);
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            seekBarSpeed.setMin(1);
+        }
+        seekBarSpeed.setMax(8);
+
+        seekBarSpeed.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+
+                    playbackParams = mediaPlayer.getPlaybackParams();
+                    currentSpeed = (float) progress/4f;
+                    playbackParams.setSpeed(currentSpeed);
+                    textViewSpeed.setText(String.valueOf(currentSpeed));
+                    if (mediaPlayer.isPlaying()) {
+
+                        mediaPlayer.setPlaybackParams(playbackParams);
+                    }
+
+                } else {
+
+                    Toast.makeText(AudioPlayerActivity.this, "Your device not for this feature. Use Android 6.0+", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+        // Set Speed in the SeekBar - End
     }
 
     private void audioPlayer() {
@@ -134,6 +286,11 @@ public class AudioPlayerActivity extends AppCompatActivity {
             if (!mediaPlayer.isPlaying()) {
                 mediaPlayer.start();
 
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    playbackParams = mediaPlayer.getPlaybackParams();
+                    playbackParams.setPitch(currentPitch);
+                    mediaPlayer.setPlaybackParams(playbackParams);
+                }
                 // Seek_bar set initial state
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 
@@ -164,7 +321,7 @@ public class AudioPlayerActivity extends AppCompatActivity {
                 });
 
                 handler = new Handler();
-                Runnable run = new Runnable() {
+                Runnable runnable = new Runnable() {
                     @Override
                     public void run() {
 
@@ -180,7 +337,7 @@ public class AudioPlayerActivity extends AppCompatActivity {
 
                     }
                 };
-                handler.post(run);
+                handler.post(runnable);
             }
             imageViewPlay.setVisibility(View.INVISIBLE);
             imageViewPause.setVisibility(View.VISIBLE);

@@ -13,4 +13,5 @@
     <string name="msg_reset_password"><b>Forgot password?</b></string>
     <string name="logout">Logout</string>
     <string name="txt_pip">PIP</string>
+    <string name="_0_0">0.0</string>
 </resources>
