@@ -113,7 +113,9 @@ public class AudioPlayerActivity extends AppCompatActivity {
         imageViewPlay = findViewById(R.id.imageViewPlay);
         imageViewPause = findViewById(R.id.imageViewPause);
         audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
-        currentPitch = 1.0f;
+
+        // Set default value of Pitch and Speed
+        currentSpeed = currentPitch = 1.0f;
 
         // Set volume in the SeekBar Start
         int maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
@@ -289,6 +291,7 @@ public class AudioPlayerActivity extends AppCompatActivity {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     playbackParams = mediaPlayer.getPlaybackParams();
                     playbackParams.setPitch(currentPitch);
+                    playbackParams.setSpeed(currentSpeed);
                     mediaPlayer.setPlaybackParams(playbackParams);
                 }
                 // Seek_bar set initial state
