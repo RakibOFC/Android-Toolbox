@@ -3,6 +3,7 @@ package com.rakibofc.androidtoolbox;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Patterns;
 import android.view.KeyEvent;
@@ -15,6 +16,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.Objects;
+
 public class NotebookSignUp extends AppCompatActivity implements View.OnClickListener, View.OnKeyListener {
 
     public EditText editTextName, editTextEmail, editTextPassword;
@@ -26,10 +29,10 @@ public class NotebookSignUp extends AppCompatActivity implements View.OnClickLis
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notebook_sign_up);
-        getSupportActionBar().hide();
+        Objects.requireNonNull(getSupportActionBar()).hide();
 
+        // Value initialize stage
         mAuth = FirebaseAuth.getInstance();
-
         editTextName = findViewById(R.id.editTextName);
         editTextEmail = findViewById(R.id.editTextEmail);
         editTextPassword = findViewById(R.id.editTextPassword);
@@ -99,12 +102,12 @@ public class NotebookSignUp extends AppCompatActivity implements View.OnClickLis
 
                                 // successfully added message
                                 Toast.makeText(getApplicationContext(), "Sign Up successfully", Toast.LENGTH_SHORT).show();
-
+                                startActivity(new Intent(NotebookSignUp.this, NotebookLogin.class));
                             } else {
 
                                 // delete user if task.isSuccessful?
                                 // Toast error message
-                                Toast.makeText(getApplicationContext(), task1.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(), Objects.requireNonNull(task1.getException()).getMessage(), Toast.LENGTH_SHORT).show();
                             }
                         });
 
@@ -117,7 +120,7 @@ public class NotebookSignUp extends AppCompatActivity implements View.OnClickLis
 
                 } else {
 
-                    Toast.makeText(getApplicationContext(), task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
         });

@@ -31,16 +31,18 @@ public class NotebookLogin extends AppCompatActivity implements View.OnClickList
     public TextView textViewResetPassword, textViewSignup;
     private FirebaseAuth mAuth;
     public static SharedPreferences sharedPreferences;
+    public boolean loggedIn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notebook_login);
-        getSupportActionBar().hide();
+        Objects.requireNonNull(getSupportActionBar()).hide();
         mAuth = FirebaseAuth.getInstance();
 
+        // Value initialize stage
         sharedPreferences = this.getSharedPreferences("com.rakibofc.androidtoolbox", Context.MODE_PRIVATE);
-        boolean loggedIn = sharedPreferences.getBoolean("loggedIn", false);
+        loggedIn = sharedPreferences.getBoolean("loggedIn", false);
 
         editTextEmail = findViewById(R.id.editTextEmail);
         editTextPassword = findViewById(R.id.editTextPassword);
@@ -48,6 +50,7 @@ public class NotebookLogin extends AppCompatActivity implements View.OnClickList
         textViewResetPassword = findViewById(R.id.textViewResetPassword);
         textViewSignup = findViewById(R.id.textViewSignup);
 
+        // If the user previously, get to access Notebook
         if (loggedIn) {
 
             Intent intent = new Intent(this, Notebook.class);
@@ -55,11 +58,9 @@ public class NotebookLogin extends AppCompatActivity implements View.OnClickList
             startActivity(intent);
 
         } else {
-
             buttonLogin.setOnClickListener(this);
             textViewResetPassword.setOnClickListener(this);
             textViewSignup.setOnClickListener(this);
-
             editTextPassword.setOnKeyListener(this);
         }
     }
