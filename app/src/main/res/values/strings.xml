@@ -11,7 +11,9 @@
     <string name="msg_sign_up">Don\'t have an account? <b>Sign up</b></string>
     <string name="msg_sign_in">Have an account? <b>Log in</b></string>
     <string name="msg_reset_password"><b>Forgot password?</b></string>
+    <string name="add_new_note">Add New Note</string>
     <string name="logout">Logout</string>
     <string name="txt_pip">PIP</string>
     <string name="_0_0">0.0</string>
+    <string name="note_title">Note Title...</string>
 </resources>

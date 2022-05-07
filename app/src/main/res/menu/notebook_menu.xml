@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/addNewNote"
+        android:title="@string/add_new_note" />
+
+    <item
+        android:id="@+id/lightMode"
+        android:title="@string/light_mode" />
+
+    <item
+        android:id="@+id/darkMode"
+        android:title="@string/dark_mode" />
+
+    <item
+        android:id="@+id/logout"
+        android:title="@string/logout" />
+
+</menu>

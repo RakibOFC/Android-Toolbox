@@ -8,6 +8,7 @@
         <entry key="app/src/main/res/layout-v21/activity_audio_player.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_audio_player.xml" value="0.5" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.5" />
+        <entry key="app/src/main/res/layout/activity_note_editor.xml" value="0.5" />
         <entry key="app/src/main/res/layout/activity_notebook.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_notebook_login.xml" value="0.22" />
         <entry key="app/src/main/res/layout/activity_notebook_reset_password.xml" value="0.22" />
@@ -16,6 +17,7 @@
         <entry key="app/src/main/res/layout/activity_system_info.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_system_info_list.xml" value="0.33" />
         <entry key="app/src/main/res/menu/main_menu.xml" value="0.22" />
+        <entry key="app/src/main/res/menu/notebook_menu.xml" value="0.16" />
         <entry key="app/src/main/res/menu/pdf_reader_menu.xml" value="0.18" />
         <entry key="app/src/main/res/menu/system_info_menu.xml" value="0.22" />
       </map>
