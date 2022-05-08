@@ -9,4 +9,5 @@
     <color name="gray">#2C2C2C</color>
     <color name="white">#FFFFFFFF</color>
     <color name="et_gray">#2E2D2D</color>
+    <color name="alert_text_color">#FFFFFFFF</color>
 </resources>
