@@ -18,12 +18,15 @@
             android:exported="false" />
         <activity
             android:name=".NotebookResetPassword"
+            android:noHistory="true"
             android:exported="false" />
         <activity
             android:name=".NotebookSignUp"
+            android:noHistory="true"
             android:exported="false" />
         <activity
             android:name=".NotebookLogin"
+            android:noHistory="true"
             android:exported="false" />
         <activity
             android:name=".Timer"
