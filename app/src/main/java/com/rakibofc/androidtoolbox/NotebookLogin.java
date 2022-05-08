@@ -118,6 +118,9 @@ public class NotebookLogin extends AppCompatActivity implements View.OnClickList
                 sharedPreferences.edit().putString("userID", firebaseUser.getUid()).apply();
                 startActivity(new Intent(this, Notebook.class));
 
+                // test
+                finish();
+
             } else {
 
                 Toast.makeText(getApplicationContext(), Objects.requireNonNull(task.getException()).toString(), Toast.LENGTH_SHORT).show();

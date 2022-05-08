@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -14,9 +15,14 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Objects;
 
 public class Notebook extends AppCompatActivity {
 
@@ -25,6 +31,8 @@ public class Notebook extends AppCompatActivity {
     public static ArrayList<String> noteTitles;
     public static ArrayList<String> notes;
     public static ArrayAdapter arrayAdapter;
+    public DatabaseReference databaseReference;
+    public String currentUserStr;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -76,6 +84,9 @@ public class Notebook extends AppCompatActivity {
         // Value Initialize Stage
         listViewMyNotes = findViewById(R.id.listViewMyNotes);
         noteTitles = new ArrayList<>();
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("users");
+        currentUserStr = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
+
         noteTitles.add("This is a note 1");
         noteTitles.add("This is a note 2");
         noteTitles.add("This is a note 3");
@@ -87,8 +98,6 @@ public class Notebook extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-
-        startActivity(new Intent(Notebook.this, MainActivity.class));
         finish();
     }
 }

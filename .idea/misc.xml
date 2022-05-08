@@ -8,7 +8,7 @@
         <entry key="app/src/main/res/layout-v21/activity_audio_player.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_audio_player.xml" value="0.5" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.5" />
-        <entry key="app/src/main/res/layout/activity_note_editor.xml" value="0.5" />
+        <entry key="app/src/main/res/layout/activity_note_editor.xml" value="0.14" />
         <entry key="app/src/main/res/layout/activity_notebook.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_notebook_login.xml" value="0.22" />
         <entry key="app/src/main/res/layout/activity_notebook_reset_password.xml" value="0.22" />
