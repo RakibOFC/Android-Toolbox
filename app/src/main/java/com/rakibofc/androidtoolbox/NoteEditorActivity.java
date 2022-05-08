@@ -123,6 +123,10 @@ public class NoteEditorActivity extends AppCompatActivity {
                 alert.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.alert_text_color));
             });
             alert.show();
+
+        } else {
+
+            super.onBackPressed();
         }
     }
 }
