@@ -26,6 +26,7 @@ public class NoteEditorActivity extends AppCompatActivity {
     public String currentUserStr;
     public EditText editTextNoteTitle;
     public EditText editTextNoteEditor;
+    String noteID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,13 +41,10 @@ public class NoteEditorActivity extends AppCompatActivity {
         // Generate New Note ID
         @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HHmmssddMMyyyy");
         Date date = new Date();
-        String noteID = "" + simpleDateFormat.format(date);
+        noteID = "" + simpleDateFormat.format(date);
 
         currentUserStr = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
         databaseReferenceAccessNote = FirebaseDatabase.getInstance().getReference().child("users").child(currentUserStr).child("notes").child(noteID);
-
-        // Store Message in Database
-        // databaseReferenceNoteID.setValue(messageSenderSide);
 
         // Save Note Title Automatically on Database
         editTextNoteTitle.addTextChangedListener(new TextWatcher() {
@@ -58,7 +56,9 @@ public class NoteEditorActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
+                Notebook.arrayAdapter.clear();
                 databaseReferenceAccessNote.child("title").setValue(editTextNoteTitle.getText().toString().trim());
+                Notebook.arrayAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -77,7 +77,9 @@ public class NoteEditorActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
+                Notebook.arrayAdapter.clear();
                 databaseReferenceAccessNote.child("note").setValue(editTextNoteEditor.getText().toString());
+                Notebook.arrayAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -97,6 +99,7 @@ public class NoteEditorActivity extends AppCompatActivity {
 
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setCancelable(false);
+            builder.setIcon(android.R.drawable.ic_dialog_info);
             builder.setTitle("Confirm Exit");
 
             if (editTextNoteTitle.getText().toString().isEmpty()){

@@ -1,22 +1,29 @@
 package com.rakibofc.androidtoolbox;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -26,12 +33,14 @@ import java.util.Objects;
 
 public class Notebook extends AppCompatActivity {
 
+    ProgressBar progressBar;
     ListView listViewMyNotes;
 
+    public static ArrayList<String> noteIds;
     public static ArrayList<String> noteTitles;
     public static ArrayList<String> notes;
     public static ArrayAdapter arrayAdapter;
-    public DatabaseReference databaseReference;
+    public DatabaseReference databaseReferenceNotes;
     public String currentUserStr;
 
     @Override
@@ -82,17 +91,82 @@ public class Notebook extends AppCompatActivity {
         this.setTitle("Notebook");
 
         // Value Initialize Stage
+        progressBar = findViewById(R.id.progressBar);
         listViewMyNotes = findViewById(R.id.listViewMyNotes);
+        noteIds = new ArrayList<>();
         noteTitles = new ArrayList<>();
-        databaseReference = FirebaseDatabase.getInstance().getReference().child("users");
+        notes = new ArrayList<>();
         currentUserStr = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
+        databaseReferenceNotes = FirebaseDatabase.getInstance().getReference().child("users").child(currentUserStr).child("notes");
 
-        noteTitles.add("This is a note 1");
-        noteTitles.add("This is a note 2");
-        noteTitles.add("This is a note 3");
+        progressBar.setVisibility(View.VISIBLE);
+
+        databaseReferenceNotes.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                arrayAdapter.clear();
+
+                for (DataSnapshot noteID : snapshot.getChildren()) {
+
+                    Log.e("Info", noteID.getKey());
+                    noteIds.add(noteID.getKey());
+                    noteTitles.add(noteID.child("title").getValue() + "");
+                    notes.add(noteID.child("note").getValue() + "");
+
+                    arrayAdapter.notifyDataSetChanged();
+                }
+                progressBar.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
 
         arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, noteTitles);
         listViewMyNotes.setAdapter(arrayAdapter);
+
+        // Remove note from database
+        listViewMyNotes.setOnItemLongClickListener((parent, view, position, id) -> {
+
+            // Show a dialog
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setCancelable(false);
+            builder.setIcon(android.R.drawable.ic_delete);
+
+            builder.setIcon(android.R.drawable.ic_delete);
+            builder.setTitle("Confirm Delete");
+            builder.setMessage("Are you sure you want to delete this note?");
+            builder.setPositiveButton("Yes", (dialog, which) -> {
+
+
+                String tempString = noteTitles.get(position);
+
+                databaseReferenceNotes.child(noteIds.get(position)).removeValue();
+                noteIds.remove(position);
+                noteTitles.remove(position);
+                notes.remove(position);
+                arrayAdapter.notifyDataSetChanged();
+
+                Toast.makeText(this, "Note \"" + tempString + "\" has been deleted", Toast.LENGTH_SHORT).show();
+            });
+
+            builder.setNegativeButton("No", (dialog, which) -> {
+                //if user select "No", just cancel this dialog and continue with app
+                dialog.cancel();
+            });
+
+            AlertDialog alert = builder.create();
+            alert.setOnShowListener(arg0 -> {
+                alert.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.alert_text_color));
+                alert.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.alert_text_color));
+            });
+            alert.show();
+
+            return true;
+        });
     }
 
     @Override
