@@ -134,11 +134,6 @@ public class Notebook extends AppCompatActivity {
 
         listViewMyNotes.setOnItemClickListener((parent, view, position, id) -> {
 
-            Log.e("Position", position + "");
-            Log.e("NoteID", noteIds.get(position) + "");
-            Log.e("NoteTitle", noteTitles.get(position) + "");
-            Log.e("Note", notes.get(position) + "");
-
             Intent intent = new Intent(getApplicationContext(), NoteEditorActivity.class);
             intent.putExtra("position", position);
             startActivity(intent);
