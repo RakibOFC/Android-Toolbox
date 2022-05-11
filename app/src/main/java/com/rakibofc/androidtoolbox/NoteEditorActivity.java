@@ -26,7 +26,8 @@ public class NoteEditorActivity extends AppCompatActivity {
     public String currentUserStr;
     public EditText editTextNoteTitle;
     public EditText editTextNoteEditor;
-    String noteID;
+    public String noteID;
+    public int currentIndex;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,10 +40,11 @@ public class NoteEditorActivity extends AppCompatActivity {
         editTextNoteEditor = findViewById(R.id.editTextNoteEditor);
 
         // Generate New Note ID
-        @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HHmmssddMMyyyy");
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMddHHmmss"); //HHmmssddMMyyyy
         Date date = new Date();
         noteID = "" + simpleDateFormat.format(date);
 
+        // Get Firebase information
         currentUserStr = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
         databaseReferenceAccessNote = FirebaseDatabase.getInstance().getReference().child("users").child(currentUserStr).child("notes").child(noteID);
 
@@ -113,7 +115,6 @@ public class NoteEditorActivity extends AppCompatActivity {
 
             builder.setMessage(alertMsg);
             builder.setPositiveButton("Yes", (dialog, which) -> {
-                //if user pressed "yes", then he is allowed to exit from application
                 finish();
             });
             builder.setNegativeButton("No", (dialog, which) -> {

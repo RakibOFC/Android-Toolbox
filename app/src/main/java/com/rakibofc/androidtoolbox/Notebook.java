@@ -93,6 +93,7 @@ public class Notebook extends AppCompatActivity {
         // Value Initialize Stage
         progressBar = findViewById(R.id.progressBar);
         listViewMyNotes = findViewById(R.id.listViewMyNotes);
+        progressBar = findViewById(R.id.progressBar);
         noteIds = new ArrayList<>();
         noteTitles = new ArrayList<>();
         notes = new ArrayList<>();
@@ -110,6 +111,7 @@ public class Notebook extends AppCompatActivity {
                 for (DataSnapshot noteID : snapshot.getChildren()) {
 
                     Log.e("Info", noteID.getKey());
+
                     noteIds.add(noteID.getKey());
                     noteTitles.add(noteID.child("title").getValue() + "");
                     notes.add(noteID.child("note").getValue() + "");
