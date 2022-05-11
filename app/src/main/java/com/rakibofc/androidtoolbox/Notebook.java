@@ -107,18 +107,19 @@ public class Notebook extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
+                noteIds.clear();
+                noteTitles.clear();
+                notes.clear();
                 arrayAdapter.clear();
 
                 for (DataSnapshot noteID : snapshot.getChildren()) {
-
-                    Log.e("Info", noteID.getKey());
 
                     noteIds.add(noteID.getKey());
                     noteTitles.add(noteID.child("title").getValue() + "");
                     notes.add(noteID.child("note").getValue() + "");
 
-                    arrayAdapter.notifyDataSetChanged();
                 }
+                arrayAdapter.notifyDataSetChanged();
                 progressBar.setVisibility(View.GONE);
             }
 
@@ -137,6 +138,10 @@ public class Notebook extends AppCompatActivity {
             Log.e("NoteID", noteIds.get(position) + "");
             Log.e("NoteTitle", noteTitles.get(position) + "");
             Log.e("Note", notes.get(position) + "");
+
+            Intent intent = new Intent(getApplicationContext(), NoteEditorActivity.class);
+            intent.putExtra("position", position);
+            startActivity(intent);
         });
 
         // Remove note from database

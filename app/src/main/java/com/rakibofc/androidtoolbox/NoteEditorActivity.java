@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -27,7 +28,7 @@ public class NoteEditorActivity extends AppCompatActivity {
     public EditText editTextNoteTitle;
     public EditText editTextNoteEditor;
     public String noteID;
-    public int currentIndex;
+    public int position;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,10 +40,19 @@ public class NoteEditorActivity extends AppCompatActivity {
         editTextNoteTitle = findViewById(R.id.editTextNoteTitle);
         editTextNoteEditor = findViewById(R.id.editTextNoteEditor);
 
+        Intent intent = getIntent();
+        position = intent.getIntExtra("position", -1);
+
         // Generate New Note ID
-        @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMddHHmmss"); //HHmmssddMMyyyy
-        Date date = new Date();
-        noteID = "" + simpleDateFormat.format(date);
+        if (position == -1) {
+            @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMddHHmmss"); //HHmmssddMMyyyy
+            Date date = new Date();
+            noteID = "" + simpleDateFormat.format(date);
+
+        } else {
+
+
+        }
 
         // Get Firebase information
         currentUserStr = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
