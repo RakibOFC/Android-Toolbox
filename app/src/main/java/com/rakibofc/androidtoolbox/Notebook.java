@@ -13,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -129,6 +130,14 @@ public class Notebook extends AppCompatActivity {
 
         arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, noteTitles);
         listViewMyNotes.setAdapter(arrayAdapter);
+
+        listViewMyNotes.setOnItemClickListener((parent, view, position, id) -> {
+
+            Log.e("Position", position + "");
+            Log.e("NoteID", noteIds.get(position) + "");
+            Log.e("NoteTitle", noteTitles.get(position) + "");
+            Log.e("Note", notes.get(position) + "");
+        });
 
         // Remove note from database
         listViewMyNotes.setOnItemLongClickListener((parent, view, position, id) -> {
