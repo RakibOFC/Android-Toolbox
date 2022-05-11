@@ -18,8 +18,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.Objects;
 
 public class SystemInfoActivity extends AppCompatActivity {
@@ -67,7 +69,7 @@ public class SystemInfoActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.N) {
             enterPictureInPictureMode();
         } else {
-            Toast.makeText(getApplicationContext(), "This device not support PiP mode", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "This device not support PiP mode. Use Android 8+ (API Level 26+)", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -175,7 +177,10 @@ public class SystemInfoActivity extends AppCompatActivity {
         systemInfoData.add(buildId);
 
         // Build Time
-        SystemInfo buildTime = new SystemInfo("Build Time", String.valueOf(Build.TIME));
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MMM dd, yyyy");
+        Date date = new Date(Build.TIME);
+        String buildDate = "" + simpleDateFormat.format(date);
+        SystemInfo buildTime = new SystemInfo("Build Time", buildDate);
         systemInfoData.add(buildTime);
 
         // Build Type
