@@ -15,6 +15,15 @@
     <string name="logout">Logout</string>
     <string name="txt_pip">PIP</string>
     <string name="_0_0">0.0</string>
-    <string name="note_title">Note Title...</string>
+    <string name="note_title">Note Title…</string>
     <string name="file_name">File: empty</string>
+    <string name="resume">Resume</string>
+    <string name="start">Start</string>
+    <string name="stop">Stop</string>
+    <string name="_00_00_00">00:00:00</string>
+    <string name="minutes">Minutes</string>
+    <string name="hours">Hours</string>
+    <string name="cancel">Cancel</string>
+    <string name="seconds">Seconds</string>
+    <string name="pause">Pause</string>
 </resources>

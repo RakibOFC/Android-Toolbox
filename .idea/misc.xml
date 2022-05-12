@@ -14,8 +14,10 @@
         <entry key="app/src/main/res/layout/activity_notebook_reset_password.xml" value="0.22" />
         <entry key="app/src/main/res/layout/activity_notebook_sign_up.xml" value="0.22" />
         <entry key="app/src/main/res/layout/activity_pdf_reader.xml" value="0.12138157894736842" />
+        <entry key="app/src/main/res/layout/activity_stopwatch.xml" value="0.2" />
         <entry key="app/src/main/res/layout/activity_system_info.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_system_info_list.xml" value="0.33" />
+        <entry key="app/src/main/res/layout/activity_timer.xml" value="0.33" />
         <entry key="app/src/main/res/menu/main_menu.xml" value="0.22" />
         <entry key="app/src/main/res/menu/notebook_menu.xml" value="0.16" />
         <entry key="app/src/main/res/menu/pdf_reader_menu.xml" value="0.18" />
