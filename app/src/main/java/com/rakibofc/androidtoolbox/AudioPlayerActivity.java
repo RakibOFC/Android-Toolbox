@@ -54,6 +54,7 @@ public class AudioPlayerActivity extends AppCompatActivity {
     public Uri audioUri;
     public String audioUriStr;
     public Handler handler;
+    public boolean isFinished = false;
 
     public PlaybackParams playbackParams;
     public float currentPitch;
@@ -157,15 +158,16 @@ public class AudioPlayerActivity extends AppCompatActivity {
         });
         // Set volume in the SeekBar - End
 
-        Log.e("Uri", audioUriStr);
+        // Play Recent loaded file
+        /*Log.e("Uri", audioUriStr);
 
         if (!audioUriStr.equals("")) {
 
-            /*Log.e("Uri", audioUriStr);
+            *//*Log.e("Uri", audioUriStr);
             audioUri = Uri.fromFile(new File(audioUriStr)); // parse
             setAudioUri();
-            audioPlayer();*/
-        }
+            audioPlayer();*//*
+        }*/
     }
 
     private void showFileChooser() {
@@ -187,18 +189,17 @@ public class AudioPlayerActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
 
                 audioUri = data.getData();
-                // sharedPreferences.edit().putString("audioUri", audioUri.toString()).apply();
-                sharedPreferences.edit().putString("audioUri", String.valueOf(data)).apply();
+                sharedPreferences.edit().putString("audioUri", audioUri.toString()).apply();
+                // sharedPreferences.edit().putString("audioUri", String.valueOf(data)).apply();
                 setAudioUri();
             }
         }
     }
 
+    @SuppressLint("SetTextI18n")
     private void setAudioUri() {
 
         isPlayable = true;
-
-        // Log.e("Uri", audioUri.isHierarchical() + ", type: " + audioUri.getClass().getSimpleName());
 
         textViewFileName.setText("File: " + getFileName(audioUri.getLastPathSegment()));
 
@@ -342,6 +343,8 @@ public class AudioPlayerActivity extends AppCompatActivity {
             if (!mediaPlayer.isPlaying()) {
                 mediaPlayer.start();
 
+                isFinished = false;
+
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     playbackParams = mediaPlayer.getPlaybackParams();
                     playbackParams.setPitch(currentPitch);
@@ -391,16 +394,22 @@ public class AudioPlayerActivity extends AppCompatActivity {
 
                         seekBarDuration.setProgress(currentPosition);
 
-                        Log.e("Duration", mediaPlayer.getCurrentPosition() + "");
+                        Log.e("Duration", mediaPlayer.getCurrentPosition() + ", Total Duration: " + mediaPlayer.getDuration());
 
-                        if (mediaPlayer.getCurrentPosition() >= mediaPlayer.getDuration()) {
+                        if (mediaPlayer.getCurrentPosition() >= mediaPlayer.getDuration() - 400) {
 
+                            Log.e("Duration", mediaPlayer.getCurrentPosition() + ", Total Duration: " + mediaPlayer.getDuration());
                             imageViewPause.setVisibility(View.INVISIBLE);
                             imageViewPlay.setVisibility(View.VISIBLE);
+
+                            isFinished = true;
                         }
 
                         handler.postDelayed(this, 1000);
 
+                        if (isFinished) {
+                            handler.removeCallbacks(this);
+                        }
                     }
                 };
                 handler.post(runnable);
