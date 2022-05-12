@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatDelegate;
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
@@ -34,7 +35,11 @@ public class Timer extends AppCompatActivity {
     NumberPicker numberPickerSeconds;
     Button buttonCancel;
     Button buttonStart;
-    boolean isRunning = false, isPause = false, isCancel = false;
+    MediaPlayer mediaPlayer;
+
+    CountDownTimer countDownTimer;
+
+    boolean isRunning = false, isValueSet = false, isCancel = false;
     long timeInMilliseconds;
 
     @Override
@@ -75,6 +80,7 @@ public class Timer extends AppCompatActivity {
         textViewTime = findViewById(R.id.textViewTime);
         buttonCancel = findViewById(R.id.buttonCancel);
         buttonStart = findViewById(R.id.buttonStart);
+        mediaPlayer = MediaPlayer.create(Timer.this, R.raw.siren);
 
         numberPickerHours = findViewById(R.id.numberPickerHours);
         numberPickerHours.setMinValue(0);
@@ -95,34 +101,30 @@ public class Timer extends AppCompatActivity {
 
             isCancel = true;
 
+            countDownTimer.onFinish();
+
             buttonCancel.setEnabled(false);
 
-            buttonStart.setText(R.string.start);
             textViewTime.setVisibility(View.GONE);
             rvInputTime.setVisibility(View.VISIBLE);
 
+            buttonStart.setText(R.string.start);
+
             isRunning = false;
-            isPause = false;
-            timeInMilliseconds = 0;
         });
 
         buttonStart.setOnClickListener(v -> {
 
-            if (!isPause) {
-
-                getInputValue();
-                Log.e("Info", "Get Value");
-            }
-
             if (buttonStart.getText().equals("Start")) {
 
-                Log.e("Info", "Start");
+                isCancel = false;
+                getInputValue();
+
                 isRunning = true;
                 buttonStart.setText(R.string.pause);
                 buttonCancel.setEnabled(true);
                 textViewTime.setVisibility(View.VISIBLE);
                 rvInputTime.setVisibility(View.GONE);
-
 
             } else if (buttonStart.getText().equals("Pause")) {
 
@@ -152,7 +154,7 @@ public class Timer extends AppCompatActivity {
 
     private void startCountDownTimer() {
 
-        CountDownTimer countDownTimer = new CountDownTimer(timeInMilliseconds, 1000) {
+        countDownTimer = new CountDownTimer(timeInMilliseconds, 1000) {
 
             public void onTick(long milliSecondsUntilDOne) {
 
@@ -163,28 +165,28 @@ public class Timer extends AppCompatActivity {
 
                 @SuppressLint("DefaultLocale") String dateTime = String.format("%02d:%02d:%02d", HH, MM, SS);
 
-                if (!isRunning) {
+                if (isRunning) {
 
-                    isPause = true;
-                    timeInMilliseconds = milliSecondsUntilDOne;
-                    this.cancel();
-
-                } else if (isCancel) {
-
-                    isCancel = false;
-                    this.onFinish();
+                    textViewTime.setText(dateTime);
 
                 } else {
 
-                    textViewTime.setText(dateTime);
+                    isValueSet = true;
+                    timeInMilliseconds = milliSecondsUntilDOne;
+                    this.cancel();
                 }
-
                 Log.e("Info", "Running");
             }
 
             public void onFinish() {
 
+                if (!isCancel) {
+                    mediaPlayer.start();
+                }
                 timeInMilliseconds = 0;
+                buttonCancel.setEnabled(false);
+                buttonStart.setText(R.string.start);
+                isRunning = false;
                 textViewTime.setVisibility(View.GONE);
                 rvInputTime.setVisibility(View.VISIBLE);
             }
