@@ -6,7 +6,9 @@ import androidx.appcompat.app.AppCompatDelegate;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -25,13 +27,16 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 
 public class AudioPlayerActivity extends AppCompatActivity {
 
-    // Light Mode Color: Maybe green #138f87
-
+    SharedPreferences sharedPreferences;
+    TextView textViewFileName;
     TextView textViewCurrentDuration;
     TextView textViewFinishTime;
     SeekBar seekBarDuration;
@@ -42,14 +47,12 @@ public class AudioPlayerActivity extends AppCompatActivity {
     SeekBar seekBarSpeed;
     TextView textViewSpeed;
     ImageView imageViewPlay, imageViewPause;
+    ImageView imageViewPlayback, imageViewPlayForward;
 
-    private String fileName;
-    public boolean isPlayable = false, isPlay;
-    public int maxVolume;
-    public int currentVolume;
-    public float audioPitch;
+    public boolean isPlayable = false;
     public static final int PICK_AUDIO_FILE = 2;
     public Uri audioUri;
+    public String audioUriStr;
     public Handler handler;
 
     public PlaybackParams playbackParams;
@@ -101,6 +104,10 @@ public class AudioPlayerActivity extends AppCompatActivity {
         this.setTitle("Audio Player");
 
         // Initialize variables
+        sharedPreferences = this.getSharedPreferences("com.rakibofc.androidtoolbox", Context.MODE_PRIVATE);
+        audioUriStr = sharedPreferences.getString("audioUri", "");
+
+        textViewFileName = findViewById(R.id.textViewFileName);
         textViewCurrentDuration = findViewById(R.id.textViewCurrentDuration);
         textViewFinishTime = findViewById(R.id.textViewFinishTime);
         seekBarDuration = findViewById(R.id.seekBarDuration);
@@ -110,6 +117,8 @@ public class AudioPlayerActivity extends AppCompatActivity {
         textViewPitch = findViewById(R.id.textViewPitch);
         seekBarSpeed = findViewById(R.id.seekBarSpeed);
         textViewSpeed = findViewById(R.id.textViewSpeed);
+        imageViewPlayback = findViewById(R.id.imageViewPlayback);
+        imageViewPlayForward = findViewById(R.id.imageViewPlayForward);
         imageViewPlay = findViewById(R.id.imageViewPlay);
         imageViewPause = findViewById(R.id.imageViewPause);
         audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
@@ -147,6 +156,16 @@ public class AudioPlayerActivity extends AppCompatActivity {
             }
         });
         // Set volume in the SeekBar - End
+
+        Log.e("Uri", audioUriStr);
+
+        if (!audioUriStr.equals("")) {
+
+            /*Log.e("Uri", audioUriStr);
+            audioUri = Uri.fromFile(new File(audioUriStr)); // parse
+            setAudioUri();
+            audioPlayer();*/
+        }
     }
 
     private void showFileChooser() {
@@ -156,28 +175,64 @@ public class AudioPlayerActivity extends AppCompatActivity {
         startActivityForResult(intent, PICK_AUDIO_FILE);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
+        Log.e("Intent Data", data + "");
 
         if (requestCode == PICK_AUDIO_FILE) {
 
             if (resultCode == RESULT_OK) {
 
-                isPlayable = true;
                 audioUri = data.getData();
-                mediaPlayer = MediaPlayer.create(AudioPlayerActivity.this, audioUri);
-
-                // Set audio file duration
-                SimpleDateFormat formatter = new SimpleDateFormat("mm:ss");
-                Date progress = new Date(mediaPlayer.getDuration());
-                textViewFinishTime.setText(formatter.format(progress));
-
-                audioPitch();
-                audioSpeed();
-                audioPlayer();
+                // sharedPreferences.edit().putString("audioUri", audioUri.toString()).apply();
+                sharedPreferences.edit().putString("audioUri", String.valueOf(data)).apply();
+                setAudioUri();
             }
         }
+    }
+
+    private void setAudioUri() {
+
+        isPlayable = true;
+
+        // Log.e("Uri", audioUri.isHierarchical() + ", type: " + audioUri.getClass().getSimpleName());
+
+        textViewFileName.setText("File: " + getFileName(audioUri.getLastPathSegment()));
+
+        mediaPlayer = MediaPlayer.create(AudioPlayerActivity.this, audioUri);
+
+        // Set audio file duration
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat formatter = new SimpleDateFormat("mm:ss");
+        Date progress = new Date(mediaPlayer.getDuration());
+        textViewFinishTime.setText(formatter.format(progress));
+
+        audioPitch();
+        audioSpeed();
+        audioPlayer();
+    }
+
+    private String getFileName(String filePath) {
+
+        StringBuilder fileName = new StringBuilder();
+        boolean isStart = false;
+
+        for (int i = 0; i < filePath.length(); i++) {
+
+            if (isStart) {
+
+                fileName.append(filePath.charAt(i));
+            }
+
+            if (filePath.charAt(i) == ':' || filePath.charAt(i) == '/') {
+
+                isStart = true;
+            }
+        }
+
+        return fileName.toString();
     }
 
     // Audio Pitch Method
@@ -263,7 +318,6 @@ public class AudioPlayerActivity extends AppCompatActivity {
                     }
 
                 } else {
-
                     Toast.makeText(AudioPlayerActivity.this, "Your device not for this feature. Use Android 6.0+", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -330,12 +384,21 @@ public class AudioPlayerActivity extends AppCompatActivity {
 
                         int currentPosition = mediaPlayer.getCurrentPosition();
 
-                        SimpleDateFormat formatter = new SimpleDateFormat("mm:ss");
+                        @SuppressLint("SimpleDateFormat") SimpleDateFormat formatter = new SimpleDateFormat("mm:ss");
                         Date progress = new Date(currentPosition);
 
                         textViewCurrentDuration.setText(formatter.format(progress));
 
                         seekBarDuration.setProgress(currentPosition);
+
+                        Log.e("Duration", mediaPlayer.getCurrentPosition() + "");
+
+                        if (mediaPlayer.getCurrentPosition() >= mediaPlayer.getDuration()) {
+
+                            imageViewPause.setVisibility(View.INVISIBLE);
+                            imageViewPlay.setVisibility(View.VISIBLE);
+                        }
+
                         handler.postDelayed(this, 1000);
 
                     }
@@ -353,6 +416,32 @@ public class AudioPlayerActivity extends AppCompatActivity {
             }
             imageViewPause.setVisibility(View.INVISIBLE);
             imageViewPlay.setVisibility(View.VISIBLE);
+        });
+
+        imageViewPlayback.setOnClickListener(v -> {
+
+            if (seekBarDuration.getProgress() - 5000 >= 0) {
+
+                seekBarDuration.setProgress(seekBarDuration.getProgress() - 5000);
+                mediaPlayer.seekTo(seekBarDuration.getProgress() - 5000);
+
+            } else {
+                seekBarDuration.setProgress(0);
+                mediaPlayer.seekTo(0);
+            }
+        });
+
+        imageViewPlayForward.setOnClickListener(v -> {
+
+            if (seekBarDuration.getProgress() + 5000 <= mediaPlayer.getDuration()) {
+
+                seekBarDuration.setProgress(seekBarDuration.getProgress() + 5000);
+                mediaPlayer.seekTo(seekBarDuration.getProgress() + 5000);
+
+            } else {
+                seekBarDuration.setProgress(mediaPlayer.getDuration());
+                mediaPlayer.seekTo(mediaPlayer.getDuration());
+            }
         });
     }
 }

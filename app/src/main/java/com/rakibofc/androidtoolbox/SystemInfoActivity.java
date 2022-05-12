@@ -9,6 +9,7 @@ import android.app.ActivityManager;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -118,7 +119,7 @@ public class SystemInfoActivity extends AppCompatActivity {
                 activityManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
                 activityManager.getMemoryInfo(memoryInfo);
 
-                availMem = (double) memoryInfo.availMem / 1073741824;
+                availMem = (double) memoryInfo.availMem / BYTE_TO_GIGABYTE;
                 textViewPIP.setText(String.format("%.2f", (totalMem - availMem)) + "GB/" + (int) Math.ceil(totalMem) + "GB");
             }
         };
@@ -155,6 +156,12 @@ public class SystemInfoActivity extends AppCompatActivity {
         ramInfo = String.format("%.2f", (totalMem - availMem)) + "GB used out of " + (int) Math.ceil(totalMem) + "GB";
         SystemInfo ram = new SystemInfo("RAM Used", ramInfo);
         systemInfoData.add(ram);
+
+        // Storage Info
+        double freeSpace = (double) Environment.getDataDirectory().getFreeSpace() / BYTE_TO_GIGABYTE;
+        // (totalSpace - freeSpace) + "GB used out of " + totalSpace + "GB"
+        SystemInfo storageUsed = new SystemInfo("Storage Info", "Free space " + String.format("%.2f", freeSpace) + "GB");
+        systemInfoData.add(storageUsed);
 
         // Available Processor
         SystemInfo availableProcessor = new SystemInfo("Available Processor (Core)", String.valueOf(Runtime.getRuntime().availableProcessors()));

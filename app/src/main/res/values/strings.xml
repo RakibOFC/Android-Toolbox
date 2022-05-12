@@ -16,5 +16,5 @@
     <string name="txt_pip">PIP</string>
     <string name="_0_0">0.0</string>
     <string name="note_title">Note Title...</string>
-    <string name="file_name">File Name</string>
+    <string name="file_name">File: </string>
 </resources>
