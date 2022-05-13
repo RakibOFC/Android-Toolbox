@@ -6,12 +6,8 @@
         android:title="@string/add_new_note" />
 
     <item
-        android:id="@+id/lightMode"
-        android:title="@string/light_mode" />
-
-    <item
-        android:id="@+id/darkMode"
-        android:title="@string/dark_mode" />
+        android:id="@+id/theme"
+        android:title="@string/theme" />
 
     <item
         android:id="@+id/logout"

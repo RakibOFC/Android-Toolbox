@@ -27,18 +27,19 @@ import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
 
-    // LinearLayout as a Button Initialize
-    public static AlertDialog.Builder alertBuilder;
+    // Value Initialization
+    public static SharedPreferences sharedPreferences;
     public static final CharSequence[] themeMode = {"Dark","Light"};
     public static int from;
     public static int checkedItem;
+
+    public AlertDialog.Builder alertBuilder;
     public LinearLayout notebook;
     public LinearLayout systemInfo;
     public LinearLayout pdfReader;
     public LinearLayout audioPlayer;
     public LinearLayout stopwatch;
     public LinearLayout timer;
-    public static SharedPreferences sharedPreferences;
 
     public final AlphaAnimation itemClick = new AlphaAnimation(2, 0);
 
@@ -67,8 +68,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // Get data from storage
-        alertBuilder = new AlertDialog.Builder(this);
         sharedPreferences = this.getSharedPreferences("com.rakibofc.androidtoolbox", Context.MODE_PRIVATE);
+
+        alertBuilder = new AlertDialog.Builder(this);
 
         // Set theme color initially
         setInitTheme();
@@ -139,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public static void changeThemeMode() {
+    private void changeThemeMode() {
 
         alertBuilder.setCancelable(false);
         alertBuilder.setTitle("Theme");

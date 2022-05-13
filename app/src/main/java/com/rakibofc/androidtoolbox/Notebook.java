@@ -1,19 +1,19 @@
 package com.rakibofc.androidtoolbox;
 
+import static com.rakibofc.androidtoolbox.MainActivity.*;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
-import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -25,18 +25,14 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
-import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Objects;
 
 public class Notebook extends AppCompatActivity {
 
-    ProgressBar progressBar;
-    ListView listViewMyNotes;
-
+    public ProgressBar progressBar;
+    public ListView listViewMyNotes;
+    public static AlertDialog.Builder alertBuilder;
     public static ArrayList<String> noteIds;
     public static ArrayList<String> noteTitles;
     public static ArrayList<String> notes;
@@ -65,12 +61,8 @@ public class Notebook extends AppCompatActivity {
                 startActivity(intent);
                 return true;
 
-            case R.id.darkMode:
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-                return true;
-
-            case R.id.lightMode:
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+            case R.id.theme:
+                changeThemeMode();
                 return true;
 
             case R.id.logout:
@@ -91,7 +83,11 @@ public class Notebook extends AppCompatActivity {
         setContentView(R.layout.activity_notebook);
         this.setTitle("Notebook");
 
+        // Set theme color initially
+        MainActivity.setInitTheme();
+
         // Value Initialize Stage
+        alertBuilder = new AlertDialog.Builder(this);
         progressBar = findViewById(R.id.progressBar);
         listViewMyNotes = findViewById(R.id.listViewMyNotes);
         progressBar = findViewById(R.id.progressBar);
@@ -176,6 +172,49 @@ public class Notebook extends AppCompatActivity {
 
             return true;
         });
+    }
+
+    // ChangeThemeMode
+    private void changeThemeMode(){
+
+        alertBuilder.setCancelable(false);
+        alertBuilder.setTitle("Theme");
+        alertBuilder.setSingleChoiceItems(themeMode, checkedItem, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                if (themeMode[which].equals("Dark")) {
+
+                    from = 2;
+
+                } else if (themeMode[which].equals("Light")) {
+
+                    from = 1;
+                }
+            }
+        });
+        alertBuilder.setPositiveButton("Change", (dialog, which) -> {
+
+            if (from == 2) {
+                sharedPreferences.edit().putInt("checkedItem", 0).apply();
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+            } else if (from == 1) {
+                sharedPreferences.edit().putInt("checkedItem", 1).apply();
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+            }
+        });
+
+        alertBuilder.setNegativeButton("Cancel", (dialog, which) -> {
+            //if user select "No", just cancel this dialog and continue with app
+            dialog.cancel();
+        });
+
+        AlertDialog alert = alertBuilder.create();
+        alert.setOnShowListener(arg0 -> {
+            alert.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(0xff138f87);
+            alert.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(0xff138f87);
+        });
+        alert.show();
     }
 
     @Override
