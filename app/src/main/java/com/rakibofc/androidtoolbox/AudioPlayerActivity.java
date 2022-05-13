@@ -1,14 +1,16 @@
 package com.rakibofc.androidtoolbox;
 
+import static com.rakibofc.androidtoolbox.MainActivity.*;
+
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -26,33 +28,28 @@ import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import java.io.File;
-import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Date;
 
 public class AudioPlayerActivity extends AppCompatActivity {
 
-    SharedPreferences sharedPreferences;
-    TextView textViewFileName;
-    TextView textViewCurrentDuration;
-    TextView textViewFinishTime;
-    SeekBar seekBarDuration;
-    SeekBar seekBarVolume;
-    TextView textViewVolume;
-    SeekBar seekBarPitch;
-    TextView textViewPitch;
-    SeekBar seekBarSpeed;
-    TextView textViewSpeed;
-    ImageView imageViewPlay, imageViewPause;
-    ImageView imageViewPlayback, imageViewPlayForward;
+    public AlertDialog.Builder alertBuilder;
+    public TextView textViewFileName;
+    public TextView textViewCurrentDuration;
+    public TextView textViewFinishTime;
+    public SeekBar seekBarDuration;
+    public SeekBar seekBarVolume;
+    public TextView textViewVolume;
+    public SeekBar seekBarPitch;
+    public TextView textViewPitch;
+    public SeekBar seekBarSpeed;
+    public TextView textViewSpeed;
+    public ImageView imageViewPlay, imageViewPause;
+    public ImageView imageViewPlayback, imageViewPlayForward;
 
     public boolean isPlayable = false;
     public static final int PICK_AUDIO_FILE = 2;
     public Uri audioUri;
-    public String audioUriStr;
     public Handler handler;
     public boolean isFinished = false;
 
@@ -88,7 +85,7 @@ public class AudioPlayerActivity extends AppCompatActivity {
                 break;
 
             case R.id.theme:
-
+                changeThemeMode();
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -100,10 +97,8 @@ public class AudioPlayerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_audio_player);
         this.setTitle("Audio Player");
 
-        // Initialize variables
-        sharedPreferences = this.getSharedPreferences("com.rakibofc.androidtoolbox", Context.MODE_PRIVATE);
-        audioUriStr = sharedPreferences.getString("audioUri", "");
-
+        // Value Initialize Stage
+        alertBuilder = new AlertDialog.Builder(this);
         textViewFileName = findViewById(R.id.textViewFileName);
         textViewCurrentDuration = findViewById(R.id.textViewCurrentDuration);
         textViewFinishTime = findViewById(R.id.textViewFinishTime);
@@ -152,18 +147,6 @@ public class AudioPlayerActivity extends AppCompatActivity {
 
             }
         });
-        // Set volume in the SeekBar - End
-
-        // Play Recent loaded file
-        /*Log.e("Uri", audioUriStr);
-
-        if (!audioUriStr.equals("")) {
-
-            *//*Log.e("Uri", audioUriStr);
-            audioUri = Uri.fromFile(new File(audioUriStr)); // parse
-            setAudioUri();
-            audioPlayer();*//*
-        }*/
     }
 
     private void showFileChooser() {
@@ -448,5 +431,47 @@ public class AudioPlayerActivity extends AppCompatActivity {
                 mediaPlayer.seekTo(mediaPlayer.getDuration());
             }
         });
+    }
+
+    private void changeThemeMode() {
+
+        alertBuilder.setCancelable(false);
+        alertBuilder.setTitle("Theme");
+        alertBuilder.setSingleChoiceItems(themeMode, checkedItem, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                if (themeMode[which].equals("Dark")) {
+
+                    from = 2;
+
+                } else if (themeMode[which].equals("Light")) {
+
+                    from = 1;
+                }
+            }
+        });
+        alertBuilder.setPositiveButton("Change", (dialog, which) -> {
+
+            if (from == 2) {
+                sharedPreferences.edit().putInt("checkedItem", 0).apply();
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+            } else if (from == 1) {
+                sharedPreferences.edit().putInt("checkedItem", 1).apply();
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+            }
+        });
+
+        alertBuilder.setNegativeButton("Cancel", (dialog, which) -> {
+            //if user select "No", just cancel this dialog and continue with app
+            dialog.cancel();
+        });
+
+        AlertDialog alert = alertBuilder.create();
+        alert.setOnShowListener(arg0 -> {
+            alert.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(0xff138f87);
+            alert.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(0xff138f87);
+        });
+        alert.show();
     }
 }
