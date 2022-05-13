@@ -1,11 +1,15 @@
 package com.rakibofc.androidtoolbox;
 
+import static com.rakibofc.androidtoolbox.MainActivity.*;
+
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -19,8 +23,10 @@ import com.github.barteksc.pdfviewer.PDFView;
 
 public class PDFReader extends AppCompatActivity {
 
+    // Value Initialization
+    public AlertDialog.Builder alertBuilder;
     private static final int PICK_PDF_FILE = 2;
-    PDFView pdfView;
+    public PDFView pdfView;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -47,12 +53,8 @@ public class PDFReader extends AppCompatActivity {
                 showFileChooser();
                 break;
 
-            case R.id.darkMode:
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-                break;
-
-            case R.id.lightMode:
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+            case R.id.theme:
+                changeThemeMode();
                 break;
         }
 
@@ -66,6 +68,8 @@ public class PDFReader extends AppCompatActivity {
         setContentView(R.layout.activity_pdf_reader);
         this.setTitle("PDF Reader");
 
+        // Value Initialize Stage
+        alertBuilder = new AlertDialog.Builder(this);
         pdfView = findViewById(R.id.pdfView);
 
     }
@@ -89,5 +93,47 @@ public class PDFReader extends AppCompatActivity {
                 pdfView.fromUri(pdfUri).load();
             }
         }
+    }
+
+    private void changeThemeMode() {
+
+        alertBuilder.setCancelable(false);
+        alertBuilder.setTitle("Theme");
+        alertBuilder.setSingleChoiceItems(themeMode, checkedItem, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                if (themeMode[which].equals("Dark")) {
+
+                    from = 2;
+
+                } else if (themeMode[which].equals("Light")) {
+
+                    from = 1;
+                }
+            }
+        });
+        alertBuilder.setPositiveButton("Change", (dialog, which) -> {
+
+            if (from == 2) {
+                sharedPreferences.edit().putInt("checkedItem", 0).apply();
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+            } else if (from == 1) {
+                sharedPreferences.edit().putInt("checkedItem", 1).apply();
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+            }
+        });
+
+        alertBuilder.setNegativeButton("Cancel", (dialog, which) -> {
+            //if user select "No", just cancel this dialog and continue with app
+            dialog.cancel();
+        });
+
+        AlertDialog alert = alertBuilder.create();
+        alert.setOnShowListener(arg0 -> {
+            alert.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(0xff138f87);
+            alert.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(0xff138f87);
+        });
+        alert.show();
     }
 }

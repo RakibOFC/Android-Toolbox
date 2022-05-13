@@ -49,52 +49,7 @@ public class Stopwatch extends AppCompatActivity {
 
         switch (item.getItemId()) {
 
-            case R.id.darkMode:
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-                break;
-
-            case R.id.lightMode:
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-                break;
-
             case R.id.theme:
-                AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
-                alertBuilder.setCancelable(false);
-                alertBuilder.setTitle("Theme");
-                alertBuilder.setSingleChoiceItems(themeMode, 1, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                        if (themeMode[which].equals("Dark")) {
-
-                            from = 2;
-
-                        } else if (themeMode[which].equals("Light")) {
-
-                            from = 1;
-                        }
-                    }
-                });
-                alertBuilder.setPositiveButton("Change", (dialog, which) -> {
-
-                    if (from == 2) {
-                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-                    } else if (from == 1) {
-                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-                    }
-                });
-
-                alertBuilder.setNegativeButton("Cancel", (dialog, which) -> {
-                    //if user select "No", just cancel this dialog and continue with app
-                    dialog.cancel();
-                });
-
-                AlertDialog alert = alertBuilder.create();
-                alert.setOnShowListener(arg0 -> {
-                    alert.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.alert_text_color));
-                    alert.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.alert_text_color));
-                });
-                alert.show();
 
                 break;
         }

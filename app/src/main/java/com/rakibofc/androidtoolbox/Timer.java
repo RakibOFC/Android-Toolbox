@@ -56,12 +56,7 @@ public class Timer extends AppCompatActivity {
 
         switch (item.getItemId()) {
 
-            case R.id.darkMode:
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-                break;
-
-            case R.id.lightMode:
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+            case R.id.theme:
                 break;
         }
 

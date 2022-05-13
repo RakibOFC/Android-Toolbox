@@ -11,11 +11,7 @@
         app:showAsAction="always" />
 
     <item
-        android:id="@+id/darkMode"
-        android:title="@string/dark_mode" />
-
-    <item
-        android:id="@+id/lightMode"
-        android:title="@string/light_mode" />
+        android:id="@+id/theme"
+        android:title="@string/theme" />
 
 </menu>

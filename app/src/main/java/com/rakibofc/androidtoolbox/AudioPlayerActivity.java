@@ -87,12 +87,8 @@ public class AudioPlayerActivity extends AppCompatActivity {
                 showFileChooser();
                 break;
 
-            case R.id.darkMode:
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-                break;
+            case R.id.theme:
 
-            case R.id.lightMode:
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
                 break;
         }
         return super.onOptionsItemSelected(item);
