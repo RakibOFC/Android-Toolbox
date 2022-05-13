@@ -6,7 +6,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -24,12 +28,17 @@ import java.util.Date;
 public class MainActivity extends AppCompatActivity {
 
     // LinearLayout as a Button Initialize
+    public static AlertDialog.Builder alertBuilder;
+    public static final CharSequence[] themeMode = {"Dark","Light"};
+    public static int from;
+    public static int checkedItem;
     public LinearLayout notebook;
     public LinearLayout systemInfo;
     public LinearLayout pdfReader;
     public LinearLayout audioPlayer;
     public LinearLayout stopwatch;
     public LinearLayout timer;
+    public static SharedPreferences sharedPreferences;
 
     public final AlphaAnimation itemClick = new AlphaAnimation(2, 0);
 
@@ -45,15 +54,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
-        switch (item.getItemId()) {
-
-            case R.id.darkMode:
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-                break;
-
-            case R.id.lightMode:
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-                break;
+        if (item.getItemId() == R.id.theme) {
+            changeThemeMode();
         }
 
         return super.onOptionsItemSelected(item);
@@ -63,6 +65,13 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // Get data from storage
+        alertBuilder = new AlertDialog.Builder(this);
+        sharedPreferences = this.getSharedPreferences("com.rakibofc.androidtoolbox", Context.MODE_PRIVATE);
+
+        // Set theme color initially
+        setInitTheme();
 
         // Button Value Initialize
         notebook = findViewById(R.id.notebook);
@@ -113,5 +122,62 @@ public class MainActivity extends AppCompatActivity {
             v.startAnimation(itemClick);
             startActivity(new Intent(MainActivity.this, Timer.class));
         });
+    }
+
+    public static void setInitTheme() {
+
+        checkedItem = sharedPreferences.getInt("checkedItem", -1);
+
+        if (checkedItem == -1 || checkedItem == 0) {
+
+            checkedItem = 0;
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+
+        } else if (checkedItem == 1) {
+
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
+    }
+
+    public static void changeThemeMode() {
+
+        alertBuilder.setCancelable(false);
+        alertBuilder.setTitle("Theme");
+        alertBuilder.setSingleChoiceItems(themeMode, checkedItem, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                if (themeMode[which].equals("Dark")) {
+
+                    from = 2;
+
+                } else if (themeMode[which].equals("Light")) {
+
+                    from = 1;
+                }
+            }
+        });
+        alertBuilder.setPositiveButton("Change", (dialog, which) -> {
+
+            if (from == 2) {
+                sharedPreferences.edit().putInt("checkedItem", 0).apply();
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+            } else if (from == 1) {
+                sharedPreferences.edit().putInt("checkedItem", 1).apply();
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+            }
+        });
+
+        alertBuilder.setNegativeButton("Cancel", (dialog, which) -> {
+            //if user select "No", just cancel this dialog and continue with app
+            dialog.cancel();
+        });
+
+        AlertDialog alert = alertBuilder.create();
+        alert.setOnShowListener(arg0 -> {
+            alert.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(0xff138f87);
+            alert.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(0xff138f87);
+        });
+        alert.show();
     }
 }

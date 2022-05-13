@@ -146,8 +146,6 @@ public class Notebook extends AppCompatActivity {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setCancelable(false);
             builder.setIcon(android.R.drawable.ic_delete);
-
-            builder.setIcon(android.R.drawable.ic_delete);
             builder.setTitle("Confirm Delete");
             builder.setMessage("Are you sure you want to delete this note?");
             builder.setPositiveButton("Yes", (dialog, which) -> {

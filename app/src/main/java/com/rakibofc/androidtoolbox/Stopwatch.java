@@ -1,10 +1,12 @@
 package com.rakibofc.androidtoolbox;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -12,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -22,6 +25,9 @@ import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 public class Stopwatch extends AppCompatActivity {
+
+    final CharSequence[] themeMode = {"Dark","Light"};
+    int from;
 
     TextView textViewTime;
     Button buttonReset;
@@ -49,6 +55,47 @@ public class Stopwatch extends AppCompatActivity {
 
             case R.id.lightMode:
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                break;
+
+            case R.id.theme:
+                AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
+                alertBuilder.setCancelable(false);
+                alertBuilder.setTitle("Theme");
+                alertBuilder.setSingleChoiceItems(themeMode, 1, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        if (themeMode[which].equals("Dark")) {
+
+                            from = 2;
+
+                        } else if (themeMode[which].equals("Light")) {
+
+                            from = 1;
+                        }
+                    }
+                });
+                alertBuilder.setPositiveButton("Change", (dialog, which) -> {
+
+                    if (from == 2) {
+                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                    } else if (from == 1) {
+                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                    }
+                });
+
+                alertBuilder.setNegativeButton("Cancel", (dialog, which) -> {
+                    //if user select "No", just cancel this dialog and continue with app
+                    dialog.cancel();
+                });
+
+                AlertDialog alert = alertBuilder.create();
+                alert.setOnShowListener(arg0 -> {
+                    alert.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.alert_text_color));
+                    alert.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.alert_text_color));
+                });
+                alert.show();
+
                 break;
         }
 
