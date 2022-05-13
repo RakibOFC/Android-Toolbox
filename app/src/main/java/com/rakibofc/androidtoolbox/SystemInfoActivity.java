@@ -1,11 +1,15 @@
 package com.rakibofc.androidtoolbox;
 
+import static com.rakibofc.androidtoolbox.MainActivity.*;
+
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
 import android.annotation.SuppressLint;
 import android.app.ActivityManager;
+import android.content.DialogInterface;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
@@ -27,14 +31,15 @@ import java.util.Objects;
 
 public class SystemInfoActivity extends AppCompatActivity {
 
-    ListView listViewSystemInfo;
+    public AlertDialog.Builder alertBuilder;
+    public ListView listViewSystemInfo;
     public ActivityManager.MemoryInfo memoryInfo;
     public ActivityManager activityManager;
     public double availMem;
     public double totalMem;
-    final static double BYTE_TO_GIGABYTE = 1073741824;
-    String ramInfo;
-    TextView textViewPIP;
+    public final static double BYTE_TO_GIGABYTE = 1073741824;
+    public String ramInfo;
+    public TextView textViewPIP;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -54,12 +59,8 @@ public class SystemInfoActivity extends AppCompatActivity {
                 goPictureInPictureMode();
                 break;
 
-            case R.id.darkMode:
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-                break;
-
-            case R.id.lightMode:
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+            case R.id.theme:
+                changeThemeMode();
                 break;
         }
 
@@ -136,6 +137,7 @@ public class SystemInfoActivity extends AppCompatActivity {
         textViewPIP = findViewById(R.id.textViewPIP);
 
         // Initialize SystemInfo List
+        alertBuilder = new AlertDialog.Builder(this);
         listViewSystemInfo = findViewById(R.id.listViewSystemInfo);
         ArrayList<SystemInfo> systemInfoData = new ArrayList<>();
 
@@ -257,5 +259,47 @@ public class SystemInfoActivity extends AppCompatActivity {
         // Create SystemInfoListAdapter for ListView
         SystemInfoListAdapter systemInfoListAdapter = new SystemInfoListAdapter(this, R.layout.activity_system_info_list, systemInfoData);
         listViewSystemInfo.setAdapter(systemInfoListAdapter);
+    }
+
+    private void changeThemeMode() {
+
+        alertBuilder.setCancelable(false);
+        alertBuilder.setTitle("Theme");
+        alertBuilder.setSingleChoiceItems(themeMode, checkedItem, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                if (themeMode[which].equals("Dark")) {
+
+                    from = 2;
+
+                } else if (themeMode[which].equals("Light")) {
+
+                    from = 1;
+                }
+            }
+        });
+        alertBuilder.setPositiveButton("Change", (dialog, which) -> {
+
+            if (from == 2) {
+                sharedPreferences.edit().putInt("checkedItem", 0).apply();
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+            } else if (from == 1) {
+                sharedPreferences.edit().putInt("checkedItem", 1).apply();
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+            }
+        });
+
+        alertBuilder.setNegativeButton("Cancel", (dialog, which) -> {
+            //if user select "No", just cancel this dialog and continue with app
+            dialog.cancel();
+        });
+
+        AlertDialog alert = alertBuilder.create();
+        alert.setOnShowListener(arg0 -> {
+            alert.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(0xff138f87);
+            alert.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(0xff138f87);
+        });
+        alert.show();
     }
 }

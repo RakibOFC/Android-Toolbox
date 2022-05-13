@@ -27,12 +27,13 @@ import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
 
-    // Value Initialization
+    // Static Value Initialization
     public static SharedPreferences sharedPreferences;
     public static final CharSequence[] themeMode = {"Dark","Light"};
     public static int from;
     public static int checkedItem;
 
+    // Other Value Initialization
     public AlertDialog.Builder alertBuilder;
     public LinearLayout notebook;
     public LinearLayout systemInfo;
