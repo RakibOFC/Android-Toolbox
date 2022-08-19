@@ -9,7 +9,6 @@ import androidx.appcompat.app.AppCompatDelegate;
 
 import android.annotation.SuppressLint;
 import android.app.ActivityManager;
-import android.content.DialogInterface;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
@@ -237,6 +236,7 @@ public class SystemInfoActivity extends AppCompatActivity {
         systemInfoData.add(productName);
 
         // Serial Number
+        @SuppressLint("HardwareIds")
         SystemInfo serialNumber = new SystemInfo("Serial No.", Build.SERIAL);
         systemInfoData.add(serialNumber);
 
@@ -265,18 +265,15 @@ public class SystemInfoActivity extends AppCompatActivity {
 
         alertBuilder.setCancelable(false);
         alertBuilder.setTitle("Theme");
-        alertBuilder.setSingleChoiceItems(themeMode, checkedItem, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
+        alertBuilder.setSingleChoiceItems(themeMode, checkedItem, (dialog, which) -> {
 
-                if (themeMode[which].equals("Dark")) {
+            if (themeMode[which].equals("Dark")) {
 
-                    from = 2;
+                from = 2;
 
-                } else if (themeMode[which].equals("Light")) {
+            } else if (themeMode[which].equals("Light")) {
 
-                    from = 1;
-                }
+                from = 1;
             }
         });
         alertBuilder.setPositiveButton("Change", (dialog, which) -> {

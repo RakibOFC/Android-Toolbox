@@ -7,7 +7,7 @@
         <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.20833333333333334" />
         <entry key="app/src/main/res/layout-v21/activity_audio_player.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_audio_player.xml" value="0.18" />
-        <entry key="app/src/main/res/layout/activity_main.xml" value="0.5" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.16" />
         <entry key="app/src/main/res/layout/activity_note_editor.xml" value="0.14" />
         <entry key="app/src/main/res/layout/activity_notebook.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_notebook_login.xml" value="0.22" />
@@ -16,7 +16,7 @@
         <entry key="app/src/main/res/layout/activity_pdf_reader.xml" value="0.12138157894736842" />
         <entry key="app/src/main/res/layout/activity_stopwatch.xml" value="0.2" />
         <entry key="app/src/main/res/layout/activity_system_info.xml" value="0.25" />
-        <entry key="app/src/main/res/layout/activity_system_info_list.xml" value="0.33" />
+        <entry key="app/src/main/res/layout/activity_system_info_list.xml" value="0.2" />
         <entry key="app/src/main/res/layout/activity_timer.xml" value="0.33" />
         <entry key="app/src/main/res/menu/main_menu.xml" value="0.22" />
         <entry key="app/src/main/res/menu/notebook_menu.xml" value="0.16" />
