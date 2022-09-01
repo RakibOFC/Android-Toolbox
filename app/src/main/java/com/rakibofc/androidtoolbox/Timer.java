@@ -30,6 +30,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
 
@@ -182,7 +183,11 @@ public class Timer extends AppCompatActivity {
             public void onFinish() {
 
                 if (!isCancel) {
-                    mediaPlayer.start();
+                    try {
+                        mediaPlayer.start();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
                 timeInMilliseconds = 0;
                 buttonCancel.setEnabled(false);
