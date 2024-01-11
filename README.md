@@ -46,23 +46,23 @@ The Android Toolbox project met its goals during testing in the Android Studio e
 
 ### Results and Discussions
 Screenshots of the Android Toolbox in action:
+
 ![Homepage Light](screenshots/homepage.jpg)
 ![Dark Theme](screenshots/homepage_dark.jpg)
 
 ![Notebook Login](screenshots/notebook_login.jpg)
 ![Notebook Signup](screenshots/notebook_signup.jpg)
+
 ![Notebook Reset Password](screenshots/notebook_reset_password.jpg)
 ![Note List](screenshots/note_list.jpg)
-![Notebook Editor](screenshots/notebook_editor.jpg)
 
+![Notebook Editor](screenshots/notebook_editor.jpg)
 ![System Info](screenshots/systeminfo.jpg)
 
 ![Pdf Reader](screenshots/pdf_reader.jpg)
-
 ![Audio Player](screenshots/audio_player.jpg)
 
 ![Stopwatch](screenshots/stopwatch.jpg)
-
 ![Timer](screenshots/timer.jpg)
 
 ### Limitations
